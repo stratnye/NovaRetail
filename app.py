@@ -243,9 +243,6 @@ st.markdown(
     f"""
     <div class="hero-band">
         <p class="hero-title">NovaRetail Customer Intelligence</p>
-        <p class="hero-sub">Revenue drivers, at-risk segments, and investment
-        opportunities across {len(df):,} of {len(df_raw):,} customer records
-        — prepared for Sophia Martinez, Director of Customer Intelligence.</p>
     </div>
     """,
     unsafe_allow_html=True,
@@ -258,7 +255,6 @@ if df.empty:
 # ----------------------------------------------------------------------------
 # KPI ROW
 # ----------------------------------------------------------------------------
-total_revenue = df["PurchaseAmount"].sum()
 avg_purchase = df["PurchaseAmount"].mean()
 avg_csat = df["CustomerSatisfaction"].mean()
 pct_decline = (df["Segment"] == "Decline").mean() * 100
@@ -297,7 +293,7 @@ with tab_overview:
             go.Pie(
                 labels=seg_counts.index,
                 values=seg_counts.values,
-                hole=0.55,
+                hole=0,
                 marker=dict(colors=[SEGMENT_COLORS[s] for s in seg_counts.index]),
                 textinfo="label+percent",
             )

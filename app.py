@@ -259,11 +259,11 @@ avg_purchase = df["PurchaseAmount"].mean()
 avg_csat = df["CustomerSatisfaction"].mean()
 pct_decline = (df["Segment"] == "Decline").mean() * 100
 
-k1, k2, k3, k4 = st.columns(4)
+k1, k2, k3 = st.columns(3)
 for col, label, value in zip(
-    [k1, k2, k3, k4],
-    ["Total Revenue", "Avg. Purchase", "Avg. CSAT (1-5)", "% At Risk (Decline)"],
-    [f"${total_revenue:,.0f}", f"${avg_purchase:,.2f}", f"{avg_csat:.2f}", f"{pct_decline:.1f}%"],
+    [k1, k2, k3],
+    ["Avg. Purchase", "Avg. CSAT (1-5)", "% At Risk (Decline)"],
+    [f"${avg_purchase:,.2f}", f"{avg_csat:.2f}", f"{pct_decline:.1f}%"],
 ):
     col.markdown(
         f"""<div class="metric-card">

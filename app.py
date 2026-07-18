@@ -331,34 +331,21 @@ with tab_overview:
                 clicked_segment = seg_counts.index[idx]
 
     if clicked_segment:
-        seg_rows = df[df["Segment"] == clicked_segment]
-        st.markdown(
-            f'<p class="section-label">{clicked_segment} segment — '
-            f'{len(seg_rows)} matching record(s)</p>',
-            unsafe_allow_html=True,
-        )
-        st.dataframe(
-            seg_rows[
-                ["Segment", "CustomerAgeGroup", "CustomerGender", "CustomerRegion",
-                 "RetailChannel", "ProductCategoryCondensed", "PurchaseAmount", "CustomerSatisfaction"]
-            ],
-            use_container_width=True, height=300,
-        )
-        st.divider()
+        snapshot_df = df[df["Segment"] == clicked_segment]
+        snapshot_title = f'Segment Snapshot — "{clicked_segment}" only'
+    else:
+        snapshot_df = df
+        snapshot_title = "Segment Snapshot — all segments"
 
-    st.markdown('<p class="section-label">Segment Snapshot</p>', unsafe_allow_html=True)
-    snap = (
-        df.groupby("Segment", observed=True)
-        .agg(
-            Records=("PurchaseAmount", "count"),
-            Avg_Purchase=("PurchaseAmount", "mean"),
-            Avg_CSAT=("CustomerSatisfaction", "mean"),
-            Total_Revenue=("PurchaseAmount", "sum"),
-        )
-        .reindex(SEGMENT_ORDER)
-        .round(2)
+    st.markdown(f'<p class="section-label">{snapshot_title}</p>', unsafe_allow_html=True)
+    st.caption(f"{len(snapshot_df)} matching record(s).")
+    st.dataframe(
+        snapshot_df[
+            ["Segment", "CustomerAgeGroup", "CustomerGender", "CustomerRegion",
+             "RetailChannel", "ProductCategoryCondensed", "PurchaseAmount", "CustomerSatisfaction"]
+        ],
+        use_container_width=True, height=360,
     )
-    st.dataframe(snap, use_container_width=True)
 
 # ---- REVENUE DRIVERS --------------------------------------------------------
 with tab_revenue:

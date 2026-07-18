@@ -315,10 +315,11 @@ with tab_overview:
             .reindex(SEGMENT_ORDER)
             .reset_index()
         )
+        rev_by_seg["sum_label"] = rev_by_seg["sum"].apply(fmt_money)
         fig = px.bar(
             rev_by_seg, x="Segment", y="sum",
             color="Segment", color_discrete_map=SEGMENT_COLORS,
-            labels={"sum": "Total Revenue ($)"}, text_auto=".2s",
+            labels={"sum": "Total Revenue ($)"}, text="sum_label",
         )
         fig.update_layout(template=PLOTLY_TEMPLATE, showlegend=False, height=340)
         st.plotly_chart(fig, use_container_width=True)
@@ -360,6 +361,9 @@ with tab_overview:
              "RetailChannel", "ProductCategoryCondensed", "PurchaseAmount", "CustomerSatisfaction"]
         ],
         use_container_width=True, height=360,
+        column_config={
+            "PurchaseAmount": st.column_config.NumberColumn("Purchase Amount", format="$%.2f"),
+        },
     )
 # ---- REVENUE DRIVERS --------------------------------------------------------
 with tab_revenue:
@@ -453,6 +457,9 @@ with tab_risk:
              "CustomerGender", "CustomerRegion", "RetailChannel", "ProductCategoryCondensed"]
         ],
         use_container_width=True, height=300,
+        column_config={
+            "PurchaseAmount": st.column_config.NumberColumn("Purchase Amount", format="$%.2f"),
+        },
     )
     st.caption(f"{len(flagged)} record(s) at or below a CSAT score of {csat_threshold}.")
 
@@ -498,7 +505,13 @@ with tab_invest:
     qualifying = opp_grp[
         (opp_grp["Avg_CSAT"] >= min_csat) & (opp_grp["Avg_Purchase"] >= min_purchase)
     ].sort_values("Avg_Purchase", ascending=False)
-    st.dataframe(qualifying.round(2), use_container_width=True)
+    st.dataframe(
+        qualifying.round(2),
+        use_container_width=True,
+        column_config={
+            "Avg_Purchase": st.column_config.NumberColumn("Avg Purchase", format="$%.2f"),
+        },
+    )
 
 # ---- DATA EXPLORER -----------------------------------------------------------
 with tab_data:
@@ -507,7 +520,12 @@ with tab_data:
         "Segment", "CustomerAgeGroup", "CustomerGender", "CustomerRegion",
         "RetailChannel", "ProductCategoryCondensed", "PurchaseAmount", "CustomerSatisfaction",
     ]
-    st.dataframe(df[display_cols], use_container_width=True, height=420)
+    st.dataframe(
+        df[display_cols], use_container_width=True, height=420,
+        column_config={
+            "PurchaseAmount": st.column_config.NumberColumn("Purchase Amount", format="$%.2f"),
+        },
+    )
     st.download_button(
         "Download filtered data (CSV)",
         df[display_cols].to_csv(index=False).encode("utf-8"),

@@ -512,7 +512,7 @@ with tab_invest:
         .reset_index()
     )
 
-   overall_avg_csat = df_raw["CustomerSatisfaction"].mean()
+    overall_avg_csat = df_raw["CustomerSatisfaction"].mean()
     overall_avg_purchase = df_raw["PurchaseAmount"].mean()
     overall_good_segment_rate = df_raw["Segment"].isin(["Stable", "Growth", "Promising"]).mean() * 100
     bigticket_threshold = df_raw["PurchaseAmount"].quantile(0.75)

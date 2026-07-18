@@ -419,7 +419,7 @@ with tab_revenue:
 
 # ---- AT-RISK SEGMENTS -------------------------------------------------------
 with tab_risk:
-    st.markdown('<p class="section-label">Breakdown of Customers Labeled 'Decline'</p>', unsafe_allow_html=True)
+    st.markdown('<p class="section-label">Breakdown of Customers Labeled as in Decline</p>', unsafe_allow_html=True)
     dim_label_r = st.radio(
         "View Decline records by:", list(DIMENSIONS.keys()), horizontal=True, key="risk_dim",
     )

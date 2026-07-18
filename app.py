@@ -157,7 +157,13 @@ DIMENSIONS = {
     "Retail Channel": "RetailChannel",
     "Product Category": "ProductCategoryCondensed",
 }
-
+def fmt_money(value) -> str:
+    """Format a number as currency: $4,000 if whole, $4,000.50 if not.
+    Always rounds to a maximum of 2 decimal places."""
+    rounded = round(float(value), 2)
+    if rounded == int(rounded):
+        return f"${rounded:,.0f}"
+    return f"${rounded:,.2f}"
 
 # ----------------------------------------------------------------------------
 # DATA LOADING & CLEANING
@@ -263,7 +269,7 @@ k1, k2, k3 = st.columns(3)
 for col, label, value in zip(
     [k1, k2, k3],
     ["Avg. Purchase", "Avg. CSAT (1-5)", "% At Risk (Decline)"],
-    [f"${avg_purchase:,.2f}", f"{avg_csat:.2f}", f"{pct_decline:.1f}%"],
+    [fmt_money(avg_purchase), f"{avg_csat:.2f}", f"{pct_decline:.1f}%"],
 ):
     col.markdown(
         f"""<div class="metric-card">
@@ -371,21 +377,23 @@ with tab_revenue:
     )
     if dim_col == "CustomerAgeGroup":
         grp = grp.sort_values(dim_col)
-
     else:
         grp = grp.sort_values("mean", ascending=False)
     grp.columns = [dim_label, "Avg Purchase", "Total Revenue", "Records"]
+    grp["avg_label"] = grp["Avg Purchase"].apply(fmt_money)
+    grp["total_label"] = grp["Total Revenue"].apply(fmt_money)
+
     c1, c2 = st.columns(2)
     with c1:
         fig = px.bar(
-            grp, x=dim_label, y="Avg Purchase", text_auto=".2f",
+            grp, x=dim_label, y="Avg Purchase", text="avg_label",
             color="Avg Purchase", color_continuous_scale=["#DCE6F0", COLOR_ACCENT],
         )
         fig.update_layout(template=PLOTLY_TEMPLATE, height=380, coloraxis_showscale=False)
         st.plotly_chart(fig, use_container_width=True)
     with c2:
         fig = px.bar(
-            grp, x=dim_label, y="Total Revenue", text_auto=".2s",
+            grp, x=dim_label, y="Total Revenue", text="total_label",
             color="Total Revenue", color_continuous_scale=["#F0E6D2", SEGMENT_COLORS["Promising"]],
         )
         fig.update_layout(template=PLOTLY_TEMPLATE, height=380, coloraxis_showscale=False)

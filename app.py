@@ -448,9 +448,37 @@ with tab_risk:
         fig.update_layout(template=PLOTLY_TEMPLATE, height=360, title="Decline rate within group")
         st.plotly_chart(fig, use_container_width=True)
 
-    st.markdown('<p class="section-label">Lowest CSAT records (flagged)</p>', unsafe_allow_html=True)
+st.markdown('<p class="section-label">Lowest CSAT records (flagged)</p>', unsafe_allow_html=True)
     csat_threshold = st.slider("Flag records with CSAT at or below:", 1, 5, 2)
     flagged = df[df["CustomerSatisfaction"] <= csat_threshold].sort_values("CustomerSatisfaction")
+
+    dim_label_c = st.radio(
+        "Break down low-CSAT customers by:", list(DIMENSIONS.keys()), horizontal=True, key="csat_dim",
+    )
+    dim_col_c = DIMENSIONS[dim_label_c]
+
+    total_by_dim_c = df.groupby(dim_col_c, observed=True).size()
+    flagged_by_dim = flagged.groupby(dim_col_c, observed=True).size()
+    flagged_rate = (flagged_by_dim / total_by_dim_c * 100).fillna(0).round(1)
+
+    c1, c2 = st.columns(2)
+    with c1:
+        fig = px.bar(
+            x=flagged_by_dim.index.astype(str), y=flagged_by_dim.values,
+            labels={"x": dim_label_c, "y": "Low-CSAT Count"},
+            color_discrete_sequence=[SEGMENT_COLORS["Decline"]],
+        )
+        fig.update_layout(template=PLOTLY_TEMPLATE, height=340, title="Low-CSAT count")
+        st.plotly_chart(fig, use_container_width=True)
+    with c2:
+        fig = px.bar(
+            x=flagged_rate.index.astype(str), y=flagged_rate.values,
+            labels={"x": dim_label_c, "y": "% of group with low CSAT"},
+            color_discrete_sequence=[SEGMENT_COLORS["Decline"]],
+        )
+        fig.update_layout(template=PLOTLY_TEMPLATE, height=340, title="Low-CSAT rate within group")
+        st.plotly_chart(fig, use_container_width=True)
+
     st.dataframe(
         flagged[
             ["Segment", "CustomerSatisfaction", "PurchaseAmount", "CustomerAgeGroup",

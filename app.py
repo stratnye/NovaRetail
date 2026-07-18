@@ -512,53 +512,20 @@ with tab_invest:
         .reset_index()
     )
 
-    overall_avg_csat = df_raw["CustomerSatisfaction"].mean()
-    overall_avg_purchase = df_raw["PurchaseAmount"].mean()
-    overall_good_segment_rate = df_raw["Segment"].isin(["Stable", "Growth", "Promising"]).mean() * 100
-    bigticket_threshold = df_raw["PurchaseAmount"].quantile(0.75)
-    overall_bigticket_rate = (df_raw["PurchaseAmount"] >= bigticket_threshold).mean() * 100
-
-    filt_avg_csat = df["CustomerSatisfaction"].mean()
-    filt_avg_purchase = df["PurchaseAmount"].mean()
-    filt_good_segment_rate = df["Segment"].isin(["Stable", "Growth", "Promising"]).mean() * 100
-    filt_bigticket_rate = (df["PurchaseAmount"] >= bigticket_threshold).mean() * 100
-
-    radar_labels = ["Avg CSAT", "Avg Purchase ($)", "% in Stable/Growth/Promising", "% Big-Ticket Purchases"]
-    radar_values = [
-        filt_avg_csat / overall_avg_csat * 100,
-        filt_avg_purchase / overall_avg_purchase * 100,
-        filt_good_segment_rate / overall_good_segment_rate * 100,
-        filt_bigticket_rate / overall_bigticket_rate * 100 if overall_bigticket_rate else 0,
-    ]
-
-    radar_fig = go.Figure()
-    radar_fig.add_trace(go.Scatterpolar(
-        r=radar_values + [radar_values[0]],
-        theta=radar_labels + [radar_labels[0]],
-        fill="toself",
-        name="Selected customers",
-        line=dict(color=COLOR_ACCENT),
-    ))
-    radar_fig.add_trace(go.Scatterpolar(
-        r=[100, 100, 100, 100, 100],
-        theta=radar_labels + [radar_labels[0]],
-        name="Overall average",
-        line=dict(color=COLOR_MUTED, dash="dash"),
-    ))
-    radar_fig.update_layout(
-        template=PLOTLY_TEMPLATE,
-        polar=dict(radialaxis=dict(visible=True, showticklabels=True, ticksuffix="%")),
-        height=460,
-        showlegend=True,
+    fig = px.scatter(
+        opp_grp, x="Avg_CSAT", y="Avg_Purchase", size="Records", color="Segment",
+        color_discrete_map=SEGMENT_COLORS, category_orders={"Segment": SEGMENT_ORDER},
+        hover_name=dim_col_i, size_max=40,
+        labels={"Avg_CSAT": "Average CSAT", "Avg_Purchase": "Average Purchase ($)"},
+        text=dim_col_i,
     )
-    st.plotly_chart(radar_fig, use_container_width=True)
+    fig.update_traces(textposition="top center")
+    fig.update_layout(template=PLOTLY_TEMPLATE, height=460)
+    st.plotly_chart(fig, use_container_width=True)
     st.caption(
-        f"Shape shows the {len(df):,} customers matching your current sidebar filters, "
-        "indexed against the overall customer base (100% = same as average). "
-        "\"Big-Ticket Purchases\" are records at or above the 75th percentile of "
-        f"purchase amount (\u2265 {fmt_money(bigticket_threshold)}) across all customers. "
-        "A shape stretched beyond the dashed line marks traits where this group "
-        "over-indexes vs. the typical customer."
+        "Bubbles further right and higher up — with larger size — mark "
+        "groups combining high satisfaction, high spend, and enough volume "
+        "to justify investment."
     )
 
     st.markdown('<p class="section-label">Opportunity table</p>', unsafe_allow_html=True)

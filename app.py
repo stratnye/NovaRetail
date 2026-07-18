@@ -303,7 +303,7 @@ with tab_overview:
             fig, use_container_width=True,
             on_select="rerun", selection_mode="points", key="segment_pie_chart",
         )
-        st.caption("Click a wedge to filter the table below to that segment."))
+        st.caption("Click a wedge to filter the table below to that segment.")
 
     with c2:
         st.markdown('<p class="section-label">Revenue by Segment</p>', unsafe_allow_html=True)

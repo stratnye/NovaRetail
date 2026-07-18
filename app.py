@@ -301,25 +301,6 @@ with tab_overview:
         fig.update_layout(template=PLOTLY_TEMPLATE, showlegend=False, height=340)
         st.plotly_chart(fig, use_container_width=True)
 
-        st.caption("Select a segment to filter the table below:")
-        if "selected_segment" not in st.session_state:
-            st.session_state.selected_segment = None
-
-        btn_cols = st.columns(len(SEGMENT_ORDER) + 1)
-        with btn_cols[0]:
-            if st.button(
-                "All", use_container_width=True,
-                type="primary" if st.session_state.selected_segment is None else "secondary",
-            ):
-                st.session_state.selected_segment = None
-        for i, seg_name in enumerate(SEGMENT_ORDER, start=1):
-            with btn_cols[i]:
-                if st.button(
-                    seg_name, use_container_width=True,
-                    type="primary" if st.session_state.selected_segment == seg_name else "secondary",
-                ):
-                    st.session_state.selected_segment = seg_name
-
     with c2:
         st.markdown('<p class="section-label">Revenue by Segment</p>', unsafe_allow_html=True)
         rev_by_seg = (
@@ -335,6 +316,27 @@ with tab_overview:
         )
         fig.update_layout(template=PLOTLY_TEMPLATE, showlegend=False, height=340)
         st.plotly_chart(fig, use_container_width=True)
+
+    st.caption("Select a segment to filter the table below:")
+    if "selected_segment" not in st.session_state:
+        st.session_state.selected_segment = None
+
+    btn_pad_l, btn_area, btn_pad_r = st.columns([1, 3, 1])
+    with btn_area:
+        btn_cols = st.columns(len(SEGMENT_ORDER) + 1)
+        with btn_cols[0]:
+            if st.button(
+                "All", use_container_width=True,
+                type="primary" if st.session_state.selected_segment is None else "secondary",
+            ):
+                st.session_state.selected_segment = None
+        for i, seg_name in enumerate(SEGMENT_ORDER, start=1):
+            with btn_cols[i]:
+                if st.button(
+                    seg_name, use_container_width=True,
+                    type="primary" if st.session_state.selected_segment == seg_name else "secondary",
+                ):
+                    st.session_state.selected_segment = seg_name
 
     clicked_segment = st.session_state.selected_segment
     if clicked_segment:

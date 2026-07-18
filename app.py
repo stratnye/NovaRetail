@@ -298,8 +298,12 @@ with tab_overview:
                 textinfo="label+percent",
             )
         )
-        fig.update_layout(template=PLOTLY_TEMPLATE, showlegend=False, height=340)
-        st.plotly_chart(fig, use_container_width=True)
+     fig.update_layout(template=PLOTLY_TEMPLATE, showlegend=False, height=340)
+        pie_selection = st.plotly_chart(
+            fig, use_container_width=True,
+            on_select="rerun", selection_mode="points", key="segment_pie_chart",
+        )
+        st.caption("Click a wedge to filter the table below to that segment.")
 
     with c2:
         st.markdown('<p class="section-label">Revenue by Segment</p>', unsafe_allow_html=True)
@@ -316,6 +320,31 @@ with tab_overview:
         )
         fig.update_layout(template=PLOTLY_TEMPLATE, showlegend=False, height=340)
         st.plotly_chart(fig, use_container_width=True)
+selected_points = pie_selection.get("selection", {}).get("points", []) if pie_selection else []
+    clicked_segment = None
+    if selected_points:
+        point = selected_points[0]
+        clicked_segment = point.get("label")
+        if clicked_segment is None:
+            idx = point.get("point_index", point.get("point_number"))
+            if idx is not None and idx < len(seg_counts.index):
+                clicked_segment = seg_counts.index[idx]
+
+    if clicked_segment:
+        seg_rows = df[df["Segment"] == clicked_segment]
+        st.markdown(
+            f'<p class="section-label">{clicked_segment} segment — '
+            f'{len(seg_rows)} matching record(s)</p>',
+            unsafe_allow_html=True,
+        )
+        st.dataframe(
+            seg_rows[
+                ["Segment", "CustomerAgeGroup", "CustomerGender", "CustomerRegion",
+                 "RetailChannel", "ProductCategoryCondensed", "PurchaseAmount", "CustomerSatisfaction"]
+            ],
+            use_container_width=True, height=300,
+        )
+        st.divider()
 
     st.markdown('<p class="section-label">Segment Snapshot</p>', unsafe_allow_html=True)
     snap = (

@@ -448,7 +448,7 @@ with tab_risk:
         fig.update_layout(template=PLOTLY_TEMPLATE, height=360, title="Decline rate within group")
         st.plotly_chart(fig, use_container_width=True)
 
-st.markdown('<p class="section-label">Lowest CSAT records (flagged)</p>', unsafe_allow_html=True)
+    st.markdown('<p class="section-label">Lowest CSAT records (flagged)</p>', unsafe_allow_html=True)
     csat_threshold = st.slider("Flag records with CSAT at or below:", 1, 5, 2)
     flagged = df[df["CustomerSatisfaction"] <= csat_threshold].sort_values("CustomerSatisfaction")
 

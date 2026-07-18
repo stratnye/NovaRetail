@@ -367,9 +367,9 @@ with tab_overview:
     )
 # ---- REVENUE DRIVERS --------------------------------------------------------
 with tab_revenue:
-    st.markdown('<p class="section-label">Average spend by dimension</p>', unsafe_allow_html=True)
+    st.markdown('<p class="section-label">Customer Segments that Generate the Most Revenue</p>', unsafe_allow_html=True)
     dim_label = st.radio(
-        "Compare average purchase amount by:",
+        "Compare average purchase size and total revenue amount by:",
         list(DIMENSIONS.keys()), horizontal=True, key="rev_dim",
     )
     dim_col = DIMENSIONS[dim_label]
@@ -419,9 +419,9 @@ with tab_revenue:
 
 # ---- AT-RISK SEGMENTS -------------------------------------------------------
 with tab_risk:
-    st.markdown('<p class="section-label">Where "Decline" customers concentrate</p>', unsafe_allow_html=True)
+    st.markdown('<p class="section-label">Breakdown of Customers Labeled 'Decline'</p>', unsafe_allow_html=True)
     dim_label_r = st.radio(
-        "Count Decline records by:", list(DIMENSIONS.keys()), horizontal=True, key="risk_dim",
+        "View Decline records by:", list(DIMENSIONS.keys()), horizontal=True, key="risk_dim",
     )
     dim_col_r = DIMENSIONS[dim_label_r]
 

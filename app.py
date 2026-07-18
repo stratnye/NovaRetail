@@ -368,10 +368,13 @@ with tab_revenue:
         df.groupby(dim_col, observed=True)["PurchaseAmount"]
         .agg(["mean", "sum", "count"])
         .reset_index()
-        .sort_values("mean", ascending=False)
     )
-    grp.columns = [dim_label, "Avg Purchase", "Total Revenue", "Records"]
+    if dim_col == "CustomerAgeGroup":
+        grp = grp.sort_values(dim_col)
 
+    else:
+        grp = grp.sort_values("mean", ascending=False)
+    grp.columns = [dim_label, "Avg Purchase", "Total Revenue", "Records"]
     c1, c2 = st.columns(2)
     with c1:
         fig = px.bar(

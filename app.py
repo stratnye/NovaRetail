@@ -298,7 +298,7 @@ with tab_overview:
                 textinfo="label+percent",
             )
         )
-     fig.update_layout(template=PLOTLY_TEMPLATE, showlegend=False, height=340)
+      fig.update_layout(template=PLOTLY_TEMPLATE, showlegend=False, height=340)
         pie_selection = st.plotly_chart(
             fig, use_container_width=True,
             on_select="rerun", selection_mode="points", key="segment_pie_chart",

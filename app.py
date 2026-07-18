@@ -320,7 +320,7 @@ with tab_overview:
         )
         fig.update_layout(template=PLOTLY_TEMPLATE, showlegend=False, height=340)
         st.plotly_chart(fig, use_container_width=True)
-selected_points = pie_selection.get("selection", {}).get("points", []) if pie_selection else []
+    selected_points = pie_selection.get("selection", {}).get("points", []) if pie_selection else []
     clicked_segment = None
     if selected_points:
         point = selected_points[0]

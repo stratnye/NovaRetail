@@ -580,7 +580,7 @@ with tab_invest:
 
     opp = df[df["Segment"].isin(["Stable", "Growth", "Promising"])]
     opp_grp = (
-        opp.groupby([dim_col_i, "Segment"], observed=True)
+        opp.groupby(dim_col_i, observed=True)
         .agg(Avg_CSAT=("CustomerSatisfaction", "mean"),
              Avg_Purchase=("PurchaseAmount", "mean"),
              Records=("PurchaseAmount", "count"))
@@ -588,9 +588,9 @@ with tab_invest:
     )
 
     fig = px.scatter(
-        opp_grp, x="Avg_CSAT", y="Avg_Purchase", size="Records", color="Segment",
-        color_discrete_map=SEGMENT_COLORS, category_orders={"Segment": SEGMENT_ORDER},
-        hover_name=dim_col_i, size_max=40,
+        opp_grp, x="Avg_CSAT", y="Avg_Purchase", size="Records",
+        color_discrete_sequence=[COLOR_ACCENT],
+        hover_name=dim_col_i, size_max=55,
         labels={"Avg_CSAT": "Average CSAT", "Avg_Purchase": "Average Purchase ($)"},
         text=dim_col_i,
     )

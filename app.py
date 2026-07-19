@@ -149,6 +149,30 @@ div[data-testid="stMetricValue"] {{
 .stTabs [aria-selected="true"] p {{
     color: #FFFFFF !important;
 }}
+.insight-card {{
+    background-color: {COLOR_CARD};
+    border: 1px solid {COLOR_LINE};
+    border-left: 4px solid {COLOR_ACCENT};
+    border-radius: 10px;
+    padding: 1.1rem 1.4rem;
+    margin-top: 1.6rem;
+    box-shadow: 0 1px 3px rgba(27,36,48,0.06);
+}}
+.insight-card h4 {{
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    color: {COLOR_INK};
+    margin: 0 0 0.5rem 0;
+}}
+.insight-card ul {{
+    margin: 0;
+    padding-left: 1.2rem;
+}}
+.insight-card li {{
+    font-size: 0.92rem;
+    color: {COLOR_INK};
+    margin-bottom: 0.35rem;
+}}
 </style>
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
@@ -180,6 +204,42 @@ def fmt_money(value) -> str:
     if rounded == int(rounded):
         return f"${rounded:,.0f}"
     return f"${rounded:,.2f}"
+
+
+# ----------------------------------------------------------------------------
+# TAKEAWAYS — edit these bullet points directly; they render as cards
+# at the bottom of each tab.
+# ----------------------------------------------------------------------------
+TAKEAWAYS = {
+    "overview": [
+        "Segment mix skews positive: Growth and Promising customers make up 60% of the sample, versus Decline and Stable at 40%.",
+        "Revenue is concentrated in the healthy segments: Growth and Promising generate roughly 72% of total sample revenue, even though Decline customers still contribute a meaningful share.",
+        "Baseline metrics: average purchase is $168.88 and average CSAT is 3.74 out of 5 — useful reference points for comparing any segment or dimension.",
+    ],
+    "revenue": [
+        "Age 45-54 has the highest average purchase ($233.74) of any meaningfully-sized age group.",
+        "Men outspend women on average ($189 vs. $149), and Physical Store purchases average higher than Online ($189 vs. $149).",
+        "Electronics customers average $428.81 per purchase and generate nearly half of all revenue from just 17 of 99 records; West region customers also spend the most on average by region.",
+    ],
+    "risk": [
+        "Age 55+ shows the highest decline rate (100%), though the sample is very small (3 records) — treat as a low-confidence signal.",
+        "Female customers (22.0% decline rate) and Physical Store shoppers (22.4%) decline at meaningfully higher rates than Male (16.3%) and Online (16.0%) customers.",
+        "The lowest CSAT scores include some high-value transactions — two Electronics purchases over $500 both scored a 1 and landed in Decline.",
+    ],
+    "invest": [
+        "25-34 and 35-44 Growth customers show strong CSAT (4.40-4.56), high average purchase (~$279-$299), and solid volume — the best all-around opportunity by age.",
+        "Online Promising customers are the largest opportunity by volume (18 records) with strong CSAT (4.50) and a healthy average purchase ($156.66).",
+        "West and North region Promising customers have the highest CSAT scores in the entire opportunity set (4.63-4.67), paired with above-average purchase amounts.",
+    ],
+}
+
+
+def render_takeaways(key: str):
+    bullets = "".join(f"<li>{b}</li>" for b in TAKEAWAYS[key])
+    st.markdown(
+        f'<div class="insight-card"><h4>Key Takeaways</h4><ul>{bullets}</ul></div>',
+        unsafe_allow_html=True,
+    )
 
 # ----------------------------------------------------------------------------
 # DATA LOADING & CLEANING
@@ -377,10 +437,9 @@ with tab_overview:
              "RetailChannel", "ProductCategoryCondensed", "PurchaseAmount", "CustomerSatisfaction"]
         ],
         use_container_width=True, height=360,
-        column_config={
-            "PurchaseAmount": st.column_config.NumberColumn("Purchase Amount", format="$%.2f"),
-        },
     )
+
+    render_takeaways("overview")
 # ---- REVENUE DRIVERS --------------------------------------------------------
 with tab_revenue:
     st.markdown('<p class="section-label">Customer Segments that Generate the Most Revenue</p>', unsafe_allow_html=True)
@@ -432,6 +491,7 @@ with tab_revenue:
     )
     fig.update_layout(template=PLOTLY_TEMPLATE, height=380, barmode="stack")
     st.plotly_chart(fig, use_container_width=True)
+    render_takeaways("revenue")
 
 # ---- AT-RISK SEGMENTS -------------------------------------------------------
 with tab_risk:
@@ -507,7 +567,7 @@ with tab_risk:
         },
     )
     st.caption(f"{len(flagged)} record(s) at or below a CSAT score of {csat_threshold}.")
-
+    render_takeaways("risk")
 # ---- INVESTMENT FOCUS -------------------------------------------------------
 with tab_invest:
     st.markdown(
@@ -543,7 +603,7 @@ with tab_invest:
         "groups combining high satisfaction, high spend, and enough volume "
         "to justify investment."
     )
-
+    render_takeaways("invest")
 # ---- DATA EXPLORER -----------------------------------------------------------
 with tab_data:
     st.markdown('<p class="section-label">Filtered records</p>', unsafe_allow_html=True)

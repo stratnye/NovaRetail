@@ -511,11 +511,11 @@ with tab_risk:
 # ---- INVESTMENT FOCUS -------------------------------------------------------
 with tab_invest:
     st.markdown(
-        '<p class="section-label">High CSAT + high purchase amount = investment priority</p>',
+        '<p class="section-label">Investment Priorities: Categories with high purchase amounts & high CSAT scores</p>',
         unsafe_allow_html=True,
     )
     dim_label_i = st.radio(
-        "Group opportunity view by:", list(DIMENSIONS.keys()), horizontal=True, key="invest_dim",
+        "Filter the data by minimum CSAT and purchase price thresholds using the sliders below:", list(DIMENSIONS.keys()), horizontal=True, key="invest_dim",
     )
     dim_col_i = DIMENSIONS[dim_label_i]
 

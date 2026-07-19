@@ -214,7 +214,6 @@ TAKEAWAYS = {
     "overview": [
         "Segment mix skews positive: Growth and Promising customers make up 60% of the sample, versus Decline and Stable at 40%.",
         "Revenue is concentrated in the healthy segments: Growth and Promising generate roughly 72% of total sample revenue, even though Decline customers still contribute a meaningful share.",
-        "Baseline metrics: average purchase is $168.88 and average CSAT is 3.74 out of 5 — useful reference points for comparing any segment or dimension.",
     ],
     "revenue": [
         "Age 45-54 has the highest average purchase ($233.74) of any meaningfully-sized age group.",
@@ -222,14 +221,14 @@ TAKEAWAYS = {
         "Electronics customers average $428.81 per purchase and generate nearly half of all revenue from just 17 of 99 records; West region customers also spend the most on average by region.",
     ],
     "risk": [
-        "Age 55+ shows the highest decline rate (100%), though the sample is very small (3 records) — treat as a low-confidence signal.",
-        "Female customers (22.0% decline rate) and Physical Store shoppers (22.4%) decline at meaningfully higher rates than Male (16.3%) and Online (16.0%) customers.",
-        "The lowest CSAT scores include some high-value transactions — two Electronics purchases over $500 both scored a 1 and landed in Decline.",
+        "Electronics is a high risk category: The lowest CSAT scores include some high-value transactions — two Electronics purchases over $500 both scored a 1 and are labeled Decline.",  
+        "Age 55+ shows the highest decline rate (100%), though they make up a very small proportion of the sample (3 records).",
+        "Female customers (22.0% decline rate) and Physical Store shoppers (22.4%) decline at meaningfully higher rates than Male (16.3%) and Online (16.0%) customers.",  
     ],
     "invest": [
-        "25-34 and 35-44 Growth customers show strong CSAT (4.40-4.56), high average purchase (~$279-$299), and solid volume — the best all-around opportunity by age.",
-        "Online Promising customers are the largest opportunity by volume (18 records) with strong CSAT (4.50) and a healthy average purchase ($156.66).",
-        "West and North region Promising customers have the highest CSAT scores in the entire opportunity set (4.63-4.67), paired with above-average purchase amounts.",
+        "The best opportunity by age is with customers ages 25-34 and 35-44: this is a Growth sgement with strong CSATs (4.40-4.56), high average purchase (~$279-$299), and solid volume.",
+        "Investment should be directed to the Online shopping experience: This category of transaction is labeled Promising, with strong CSAT (4.50) and a healthy average purchase ($156.66).",
+        "Customer behavior is also more promising in the West and North regions. Customers in this region have higher CSAT ratings (4.63-4.67), paired with above-average purchase amounts.",
     ],
 }
 

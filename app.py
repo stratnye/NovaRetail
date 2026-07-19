@@ -126,12 +126,28 @@ div[data-testid="stMetricValue"] {{
     font-family: 'Fraunces', serif;
 }}
 .stTabs [data-baseweb="tab-list"] {{
-    gap: 4px;
+    gap: 8px;
+    margin-top: 0.5rem;
+    margin-bottom: 1.2rem;
 }}
 .stTabs [data-baseweb="tab"] {{
     background-color: {COLOR_CARD};
-    border-radius: 8px 8px 0 0;
-    padding: 0.5rem 1rem;
+    border: 1px solid {COLOR_LINE};
+    border-radius: 10px 10px 0 0;
+    padding: 0.9rem 1.6rem;
+    height: auto;
+}}
+.stTabs [data-baseweb="tab"] p {{
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: {COLOR_INK};
+}}
+.stTabs [aria-selected="true"] {{
+    background-color: {COLOR_ACCENT} !important;
+    border-color: {COLOR_ACCENT} !important;
+}}
+.stTabs [aria-selected="true"] p {{
+    color: #FFFFFF !important;
 }}
 </style>
 """

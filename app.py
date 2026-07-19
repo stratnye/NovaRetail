@@ -515,7 +515,7 @@ with tab_invest:
         unsafe_allow_html=True,
     )
     dim_label_i = st.radio(
-        "Filter the data by minimum CSAT and purchase price thresholds using the sliders below:", list(DIMENSIONS.keys()), horizontal=True, key="invest_dim",
+        "Choose a customer dimension to filter by:", list(DIMENSIONS.keys()), horizontal=True, key="invest_dim",
     )
     dim_col_i = DIMENSIONS[dim_label_i]
 
@@ -545,6 +545,9 @@ with tab_invest:
     )
 
     st.markdown('<p class="section-label">Opportunity table</p>', unsafe_allow_html=True)
+    st.caption(
+      "Filter the data by minimum CSAT and purchase price thresholds using the sliders below:"
+    )
     min_csat = st.slider("Minimum average CSAT", 1.0, 5.0, 4.0, 0.1)
     min_purchase = st.slider("Minimum average purchase ($)", 0, 1000, 100, 10)
     qualifying = opp_grp[

@@ -544,23 +544,6 @@ with tab_invest:
         "to justify investment."
     )
 
-    st.markdown('<p class="section-label">Opportunity table</p>', unsafe_allow_html=True)
-    st.caption(
-      "Filter the data by minimum CSAT and purchase price thresholds using the sliders below:"
-    )
-    min_csat = st.slider("Minimum average CSAT", 1.0, 5.0, 4.0, 0.1)
-    min_purchase = st.slider("Minimum average purchase ($)", 0, 1000, 100, 10)
-    qualifying = opp_grp[
-        (opp_grp["Avg_CSAT"] >= min_csat) & (opp_grp["Avg_Purchase"] >= min_purchase)
-    ].sort_values("Avg_Purchase", ascending=False)
-    st.dataframe(
-        qualifying.round(2),
-        use_container_width=True,
-        column_config={
-            "Avg_Purchase": st.column_config.NumberColumn("Avg Purchase", format="$%.2f"),
-        },
-    )
-
 # ---- DATA EXPLORER -----------------------------------------------------------
 with tab_data:
     st.markdown('<p class="section-label">Filtered records</p>', unsafe_allow_html=True)
